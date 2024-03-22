@@ -1,11 +1,11 @@
-import java.awt.image.BufferedImage;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
-import java.time.Instant;
 import java.time.Duration;
+import java.time.Instant;
 import javax.imageio.ImageIO;
 class Screen {
     private StringBuilder buffer;
@@ -45,15 +45,18 @@ class Screen {
         System.out.println(buffer.toString());
     }
 }
-public class Renderer {
+public class Renderer extends Thread {
     private static int W = 80;
     private static int H = 60;
     private static Screen screen;
     public static void render(BufferedImage img) {
+        Instant start = Instant.now();
         for (int i=0; i<img.getHeight(); ++i)
             for (int j=0; j<img.getWidth(); ++j)
                 screen.set(img.getRGB(j, i), i, j);
+        Instant end = Instant.now();
         screen.display();
+        System.out.println("Rendered in: " + Duration.between(start,end).toMillis() + "ms");
     }
     public static void main(String[] args) throws IOException {
         if (ImageIO.read(new File(args[0]))!=null) {
@@ -77,10 +80,7 @@ public class Renderer {
                 g.drawImage(tmp, 0, 0, dim.width, dim.height, null);
                 g.dispose();
             }
-            Instant start = Instant.now();
             render(img);
-            Instant end = Instant.now();
-            System.out.println("Rendered in: " + Duration.between(start,end).toMillis() + "ms");
         }
     }
 }
