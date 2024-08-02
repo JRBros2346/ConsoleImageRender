@@ -59,8 +59,8 @@ public class Renderer extends Thread {
         System.out.println("Rendered in: " + Duration.between(start,end).toMillis() + "ms");
     }
     public static void main(String[] args) throws IOException {
-        if (ImageIO.read(new File(args[0]))!=null) {
-            BufferedImage img = ImageIO.read(new File(args[0]));
+        BufferedImage img;
+        if ((img = ImageIO.read(new File(args[0])))!=null) {
             Dimension dim = new Dimension(img.getWidth(),img.getHeight());
             if (img.getWidth()>W) {
                 dim.width = W;
